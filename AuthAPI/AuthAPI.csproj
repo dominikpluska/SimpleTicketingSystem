@@ -11,8 +11,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\DataAccess\DataAccess.csproj" />
-    <ProjectReference Include="..\GlobalServices\GlobalServices.csproj" />
+    <Folder Include="Controllers\" />
   </ItemGroup>
 
 </Project>

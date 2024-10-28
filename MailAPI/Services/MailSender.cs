@@ -1,4 +1,6 @@
-﻿using MailSenderService.Interfaces;
+﻿using DataAccess.Models;
+using MailAPI.Services.IServices;
+using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,7 +9,7 @@ using System.Net.Mail;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MailSenderService
+namespace MailAPI.Services
 {
     public class MailSender : IMailSender
     {
@@ -19,30 +21,25 @@ namespace MailSenderService
         private bool _enableSsl = false;
         private readonly SmtpDeliveryMethod _smtpDeliveryMethod = SmtpDeliveryMethod.Network;
         private readonly string _password;
+        private readonly IConfiguration _configuration;
 
 
-        public MailSender(string senderMailAddress, string host, int port = 25)
+        public MailSender(IConfiguration configuration)
         {
-            _senderMailAddress = senderMailAddress;
-            _host = host;
-            _port = port;
-        }
-
-        public MailSender(string senderMailAddress, string host, bool enableSsl, bool useDefaultCredentials, int port, string password = null)
-        {
-            _senderMailAddress = senderMailAddress;
-            _host = host;
-            _port = port;
-            _enableSsl = enableSsl;
-            _useDefaultCredentials = useDefaultCredentials;
-            _password = password;
+            _configuration = configuration;
+            _senderMailAddress = _configuration.GetValue<string>("MailSettings:SenderMailAddress");
+            _host = _configuration.GetValue<string>("MailSettings:Host");
+            _port = _configuration.GetValue<int>("MailSettings:Port");
+            _enableSsl = _configuration.GetValue<bool>("EnableSsl:Port");
+            _useDefaultCredentials = _configuration.GetValue<bool>("UseDefaultCredentials:Port");
+            _password = _configuration.GetValue<string>("MailSettings:Password");
         }
 
 
-        public void SendEmail(string recipientMailAddress, string subject, string body, string[] attachmentPaths = null)
+        public void SendEmail(Email email)
         {
             MailAddress sender = new MailAddress(_senderMailAddress);
-            MailAddress recipient = new MailAddress(recipientMailAddress);
+            MailAddress recipient = new MailAddress(email.RecipientMailAddress);
 
             NetworkCredential networkCredential = new NetworkCredential(sender.Address, _password);
 
@@ -63,12 +60,12 @@ namespace MailSenderService
             {
                 using (var message = new MailMessage(sender, recipient))
                 {
-                    message.Subject = subject;
-                    message.Body = body;
+                    message.Subject = email.Subject;
+                    message.Body = email.Body;
 
-                    if (attachmentPaths != null)
+                    if (email.AttachmentPaths != null)
                     {
-                        foreach (string filePath in attachmentPaths)
+                        foreach (string filePath in email.AttachmentPaths)
                         {
                             Attachment attachment = new Attachment(filePath);
                             message.Attachments.Add(attachment);

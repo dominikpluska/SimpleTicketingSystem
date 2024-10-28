@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -21,8 +22,6 @@ namespace DataAccess.StaticData
         {
             return $"Server=.;Database={dataBase};Trusted_Connection=True;TrustServerCertificate=True;";
         }
-
-
 
     }
 }

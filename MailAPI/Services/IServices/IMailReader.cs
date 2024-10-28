@@ -4,9 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MailSenderService.Interfaces
+namespace MailAPI.Services.IServices
 {
     public interface IMailReader
     {
+        //To Be implemented
     }
 }

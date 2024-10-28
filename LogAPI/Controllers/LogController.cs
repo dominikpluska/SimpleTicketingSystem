@@ -48,7 +48,7 @@ namespace LogAPI.Controllers
             }
             catch (Exception ex)
             {
-                _response.IsSuccess = true;
+                _response.IsSuccess = false;
                 _response.Message = ex.Message.ToString();
                 _response.Data = "Error";
                 return StatusCode(500, _response);
@@ -70,7 +70,7 @@ namespace LogAPI.Controllers
             }
             catch (Exception ex)
             {
-                _response.IsSuccess = true;
+                _response.IsSuccess = false;
                 _response.Message = ex.Message.ToString();
                 _response.Data = "Error";
                 return StatusCode(500, _response);

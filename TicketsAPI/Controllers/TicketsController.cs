@@ -1,8 +1,9 @@
 ﻿using DataAccess.Models;
+using GlobalServices.Interface;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System.Net.Sockets;
 using TicketsAPI.Repository;
-using TicketsAPI.Services.IServices;
 
 namespace TicketsAPI.Controllers
 {
@@ -11,17 +12,21 @@ namespace TicketsAPI.Controllers
     public class TicketsController : ControllerBase
     {
         private readonly IUnitOfWork _unitOfWork;
+        private readonly IGlobalServices _logService;
         private readonly Response _response;
-        private readonly ILogService _logService;
-        public TicketsController(IUnitOfWork unitOfWork, ILogService logService)
+        private readonly Log _log;
+        
+        public TicketsController(IUnitOfWork unitOfWork, IGlobalServices logService)
         {
             _unitOfWork = unitOfWork;
-            _response = new Response();
             _logService = logService;
+
+            _response = new Response();
+            _log = new Log();
         }
 
-        [HttpGet("GetAllLogs")]
-        public async Task<ActionResult<Response>> GetAllLogs()
+        [HttpGet("GetAllTickets")]
+        public async Task<ActionResult<Response>> GetAllTickets()
         {
             try
             {
@@ -29,12 +34,26 @@ namespace TicketsAPI.Controllers
                 _response.IsSuccess = true;
                 _response.Message = $"All tickets have been retrived by the controller";
                 _response.Data = list;
+
+
+                _log.ServiceName = "TicketAPI";
+                _log.UserName = "string";
+                _log.Message = _response.Message;
+
+                _logService.WriteLog(_log);
             }
             catch (Exception ex)
             {
                 _response.IsSuccess = false;
                 _response.Message = ex.Message.ToString();
                 _response.Data = "Error";
+
+                _log.ServiceName = "TicketAPI";
+                _log.UserName = "string";
+                _log.Message = _response.Message;
+
+                _logService.WriteLog(_log);
+
                 return StatusCode(500, _response);
             }
 
@@ -52,14 +71,12 @@ namespace TicketsAPI.Controllers
                 _response.Message = $"New ticket {ticket.TicketId}  has been added by {ticket.UserName}";
                 _response.Data = ticket;
 
-                Log log = new()
-                {
-                    ServiceName = "TicketAPI",
-                    UserName = ticket.UserName,
-                    Message = _response.Message
-                };
 
-                _logService.WriteLog(log);
+                _log.ServiceName = "TicketAPI";
+                _log.UserName = ticket.UserName;
+                _log.Message = _response.Message;
+
+                _logService.WriteLog(_log);
 
             }
             catch (Exception ex)
@@ -68,14 +85,11 @@ namespace TicketsAPI.Controllers
                 _response.Message = ex.Message.ToString();
                 _response.Data = "Error";
 
-                Log log = new()
-                {
-                    ServiceName = "TicketAPI",
-                    UserName = ticket.UserName,
-                    Message = _response.Message
-                };
+                _log.ServiceName = "TicketAPI";
+                _log.UserName = ticket.UserName;
+                _log.Message = _response.Message;
 
-                _logService.WriteLog(log);
+                _logService.WriteLog(_log);
 
                 return StatusCode(500, _response);
             }
@@ -83,7 +97,4 @@ namespace TicketsAPI.Controllers
             return _response;
         }
     }
-
-
-
 }
