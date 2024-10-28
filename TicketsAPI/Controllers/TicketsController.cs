@@ -73,6 +73,7 @@ namespace TicketsAPI.Controllers
 
 
                 _log.ServiceName = "TicketAPI";
+                _log.LogType = "Error";
                 _log.UserName = ticket.UserName;
                 _log.Message = _response.Message;
 

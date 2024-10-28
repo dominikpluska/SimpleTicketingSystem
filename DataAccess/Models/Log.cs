@@ -12,6 +12,7 @@ namespace DataAccess.Models
         [Key]
         public int EntryId { get; set; }
         public string ServiceName { get; set; }
+        public string LogType { get; set; } = "Info";
         public string UserName { get; set; }
         public DateTime LogTime { get; set; } = DateTime.Now;
         public string Message { get; set; }

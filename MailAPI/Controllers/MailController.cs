@@ -47,6 +47,7 @@ namespace MailAPI.Controllers
                 _response.Data = "Error";
 
                 _log.ServiceName = "MailApi";
+                _log.LogType = "Error";
                 _log.UserName = "MailService";
                 _log.Message = _response.Message;
                 _logService.WriteLog(_log);
