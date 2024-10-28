@@ -19,16 +19,18 @@ namespace AuthAPI.Controllers
         private readonly IUnitOfWorkUser _unitOfWorkUser;
         private readonly ICreateJwtToken _createJwtToken;
         private readonly IUnitOfWorkRole _unitOfWorkRole;
+        private readonly IUnitOfWorkGroup _unitOfWorkGroup;
         private readonly IGlobalServices _logService;
         private readonly Response _response;
         private readonly Log _log;
 
         public AuthController(IUnitOfWorkAuth unitOfWorkAuth, IUnitOfWorkUser unitOfWorkUser, ICreateJwtToken createJwtToken,
-            IUnitOfWorkRole unitOfWorkRole, IGlobalServices logService)
+            IUnitOfWorkRole unitOfWorkRole, IUnitOfWorkGroup unitOfWorkGroup, IGlobalServices logService)
         {
             _unitOfWorkAuth = unitOfWorkAuth;
             _unitOfWorkUser = unitOfWorkUser;
             _unitOfWorkRole = unitOfWorkRole;
+            _unitOfWorkGroup = unitOfWorkGroup;
             _createJwtToken = createJwtToken;
             _logService = logService;
             _log = new Log();
@@ -63,13 +65,54 @@ namespace AuthAPI.Controllers
                     userAccount.UserId = user.UserId;
                     userAccount.PasswordHash = passwordHash;
                     userAccount.UserName = userAccountDto.UserName;
-                    userAccount.RoleId  = await _unitOfWorkRole.RoleRepository.GetRoleId();
+
+                    if (string.IsNullOrEmpty(userAccountDto.SelectedRole))
+                    {
+                        _response.IsSuccess = false;
+                        _response.Message = $"User Account must have specified Role!";
+                        _response.Data = null;
+
+                        _log.ServiceName = "AuthAPI";
+                        _log.LogType = "Error";
+                        _log.UserName = "string";
+                        _log.Message = _response.Message;
+
+                        _logService.WriteLog(_log);
+                    }
+
+                    userAccount.RoleId  = await _unitOfWorkRole.RoleRepository.GetRoleId(userAccountDto.SelectedRole);
+
+                    if(string.IsNullOrEmpty(userAccountDto.SelectedGroup))
+                    {
+                        _response.IsSuccess = false;
+                        _response.Message = $"User Account must have specified Group!";
+                        _response.Data = null;
+
+                        _log.ServiceName = "AuthAPI";
+                        _log.LogType = "Error";
+                        _log.UserName = "string";
+                        _log.Message = _response.Message;
+
+                        _logService.WriteLog(_log);
+                    }
+
+                    userAccount.GroupId = await _unitOfWorkGroup.GroupRepository.GetGroupId(userAccountDto.SelectedGroup);
 
                     _unitOfWorkAuth.AuthRepository.Add(userAccount);
+                    _unitOfWorkAuth.SaveChanges();
+
+
+                    _response.IsSuccess = true;
+                    _response.Message = $"User account {userAccount.UserName} has been added to the database";
+                    _response.Data = null;
+
+                    _log.ServiceName = "AuthAPI";
+                    _log.LogType = "Info";
+                    _log.UserName = "string";
+                    _log.Message = _response.Message;
+
+                    _logService.WriteLog(_log);
                 }
-
-                
-
 
             }
             catch (Exception ex)

@@ -6,5 +6,6 @@
         public string Password { get; set; }
         public string? Email { get; set; } = null;
         public string? SelectedRole { get; set; } = null;
+        public string? SelectedGroup { get; set; } = null;
     }
 }

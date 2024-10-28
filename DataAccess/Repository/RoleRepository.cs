@@ -12,16 +12,18 @@ namespace DataAccess.Repository
     public class RoleRepository : Repository<Role>, IRoleRepository
     {
         private readonly DbContext _context;
+        internal DbSet<Role> _dbSet;
 
         public RoleRepository(DbContext context) : base(context)
         {
             _context = context;
+            this._dbSet = _context.Set<Role>();
         }
 
-        public int GetRoleId()
+        public async Task<int> GetRoleId(string roleName)
         {
-            //To be implemented
-            return 1;
+            return await _dbSet.Where(x => x.RoleName == roleName).Select(x => x.RoleId).FirstOrDefaultAsync();
+
         }
     }
 }

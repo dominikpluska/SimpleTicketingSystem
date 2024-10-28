@@ -26,6 +26,7 @@ builder.Services.AddHttpClient("Log", x => x.BaseAddress = new Uri("https://loca
 builder.Services.AddScoped<IUnitOfWorkAuth, UnitOfWorkAuth>();
 builder.Services.AddScoped<IUnitOfWorkUser, UnitOfWorkUser>();
 builder.Services.AddScoped<IUnitOfWorkRole, UnitOfWorkRole>();
+builder.Services.AddScoped<IUnitOfWorkGroup, UnitOfWorkGroup>();
 builder.Services.AddScoped<ICreateJwtToken, CreateJwtToken>();
 builder.Services.AddScoped<IGlobalServices, Services>();
 

@@ -7,8 +7,8 @@ using System.Threading.Tasks;
 
 namespace DataAccess.Repository.Interface
 {
-    public interface IRoleRepository : IRepository<Role>
+    public interface IGroupRepository : IRepository<Group>
     {
-        public Task<int> GetRoleId(string roleName);
+        public Task<int> GetGroupId(string groupName);
     }
 }
