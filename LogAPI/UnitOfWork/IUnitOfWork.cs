@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace LogAPI.Repository
+namespace LogAPI.UnitOfWork
 {
     public interface IUnitOfWork
     {

@@ -1,5 +1,5 @@
 ﻿using DataAccess.Models;
-using LogAPI.Repository;
+using LogAPI.UnitOfWork;
 using Microsoft.AspNetCore.Mvc;
 
 namespace LogAPI.Controllers

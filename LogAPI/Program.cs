@@ -1,9 +1,9 @@
 using DataAccess.Repository.Interface;
 using DataAccess.Repository;
 using LogAPI.Data;
-using LogAPI.Repository;
 using Microsoft.EntityFrameworkCore;
 using DataAccess.StaticData;
+using LogAPI.UnitOfWork;
 
 var builder = WebApplication.CreateBuilder(args);
 

@@ -3,8 +3,8 @@ using DataAccess.StaticData;
 using GlobalServices.Interface;
 using Microsoft.EntityFrameworkCore;
 using TicketsAPI.Data;
-using TicketsAPI.Repository;
 using TicketsAPI.Services;
+using TicketsAPI.UnitOfWork;
 
 
 var builder = WebApplication.CreateBuilder(args);

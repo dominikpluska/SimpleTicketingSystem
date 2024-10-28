@@ -3,7 +3,7 @@ using GlobalServices.Interface;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Net.Sockets;
-using TicketsAPI.Repository;
+using TicketsAPI.UnitOfWork;
 
 namespace TicketsAPI.Controllers
 {

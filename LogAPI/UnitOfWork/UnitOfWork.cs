@@ -9,7 +9,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 
-namespace LogAPI.Repository
+namespace LogAPI.UnitOfWork
 {
     public class UnitOfWork : IUnitOfWork
     {

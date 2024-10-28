@@ -1,4 +1,7 @@
 using AuthAPI.Data;
+using AuthAPI.JwtGenerator;
+using AuthAPI.JwtGenerator.ICreateJwtToken;
+using AuthAPI.UnitOfWork;
 using DataAccess.StaticData;
 using Microsoft.EntityFrameworkCore;
 
@@ -7,6 +10,8 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 
 builder.Services.AddControllers();
+builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
+builder.Services.AddScoped<ICreateJwtToken, CreateJwtToken>();
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
 {
     options.UseSqlServer(StaticData.ReturnConnectionString("SimpleTicketingSystem_UserData"));
@@ -14,6 +19,8 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+
+
 
 var app = builder.Build();
 
