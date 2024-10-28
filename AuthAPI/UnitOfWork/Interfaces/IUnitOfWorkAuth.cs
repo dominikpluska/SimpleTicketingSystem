@@ -5,9 +5,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace AuthAPI.UnitOfWork
+namespace AuthAPI.UnitOfWork.Interfaces
 {
-    public interface IUnitOfWork
+    public interface IUnitOfWorkAuth
     {
         public IAuthRepository AuthRepository { get; }
 

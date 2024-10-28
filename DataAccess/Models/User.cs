@@ -22,14 +22,6 @@ namespace DataAccess.Models
         public string Position { get; set; }
 
         [Required]
-        [ForeignKey("RoleId")]
-        public Role Role { get; set; }
-
-        [Required]
-        [ForeignKey("GroupId")]
-        public Group Group { get; set; }
-
-        [Required]
         public bool IsVIP { get; set; } = false;
 
     }

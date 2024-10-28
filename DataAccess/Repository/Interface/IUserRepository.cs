@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace DataAccess.Repository.Interface
 {
-    public interface IAuthRepository : IRepository<UserAccount>
+    public interface IUserRepository : IRepository<User>
     {
     }
 }

@@ -19,5 +19,12 @@ namespace DataAccess.Models
         public string UserName { get; set; }
         [Required]
         public string PasswordHash { get; set; }
+        [Required]
+        [ForeignKey("RoleId")]
+        public int RoleId { get; set; }
+
+        [Required]
+        [ForeignKey("GroupId")]
+        public int GroupId { get; set; }
     }
 }

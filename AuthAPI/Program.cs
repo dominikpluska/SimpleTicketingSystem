@@ -1,8 +1,11 @@
 using AuthAPI.Data;
 using AuthAPI.JwtGenerator;
 using AuthAPI.JwtGenerator.ICreateJwtToken;
+using AuthAPI.Services;
 using AuthAPI.UnitOfWork;
+using AuthAPI.UnitOfWork.Interfaces;
 using DataAccess.StaticData;
+using GlobalServices.Interface;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -10,8 +13,6 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 
 builder.Services.AddControllers();
-builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
-builder.Services.AddScoped<ICreateJwtToken, CreateJwtToken>();
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
 {
     options.UseSqlServer(StaticData.ReturnConnectionString("SimpleTicketingSystem_UserData"));
@@ -20,7 +21,13 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+builder.Services.AddHttpClient("Log", x => x.BaseAddress = new Uri("https://localhost:7201"));
 
+builder.Services.AddScoped<IUnitOfWorkAuth, UnitOfWorkAuth>();
+builder.Services.AddScoped<IUnitOfWorkUser, UnitOfWorkUser>();
+builder.Services.AddScoped<IUnitOfWorkRole, UnitOfWorkRole>();
+builder.Services.AddScoped<ICreateJwtToken, CreateJwtToken>();
+builder.Services.AddScoped<IGlobalServices, Services>();
 
 var app = builder.Build();
 

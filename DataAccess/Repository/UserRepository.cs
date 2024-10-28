@@ -9,11 +9,11 @@ using System.Threading.Tasks;
 
 namespace DataAccess.Repository
 {
-    public class AuthRepository : Repository<UserAccount>, IAuthRepository
+    public class UserRepository : Repository<User>, IUserRepository
     {
         private readonly DbContext _context;
 
-        public AuthRepository(DbContext context) : base(context)
+        public UserRepository(DbContext context) : base(context)
         {
             _context = context;
         }

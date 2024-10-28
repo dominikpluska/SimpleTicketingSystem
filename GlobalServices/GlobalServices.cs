@@ -29,8 +29,6 @@ namespace GlobalServices
 
         }
 
-
-
         private async void ApiOperation(object data, string clientName, string apiPath)
         {
             var jsonLog = JsonSerializer.Serialize(data);

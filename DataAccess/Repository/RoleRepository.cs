@@ -9,13 +9,19 @@ using System.Threading.Tasks;
 
 namespace DataAccess.Repository
 {
-    public class AuthRepository : Repository<UserAccount>, IAuthRepository
+    public class RoleRepository : Repository<Role>, IRoleRepository
     {
         private readonly DbContext _context;
 
-        public AuthRepository(DbContext context) : base(context)
+        public RoleRepository(DbContext context) : base(context)
         {
             _context = context;
+        }
+
+        public int GetRoleId()
+        {
+            //To be implemented
+            return 1;
         }
     }
 }
