@@ -13,6 +13,7 @@ namespace AuthAPI.Data
         }
 
         public DbSet<User> Users { get; set; }
+        public DbSet<UserAccount> UserAccounts { get; set; }
         public DbSet<Role> Roles { get; set; }
         public DbSet<Group> Groups { get; set; }
         public DbSet<JWT> JWTs { get; set; }
@@ -44,6 +45,12 @@ namespace AuthAPI.Data
             {
                 GroupId = 1,
                 GroupName = StaticData.defaultAssingmentGroup.ToString(),
+            });
+
+            modelBuilder.Entity<Group>().HasData(new Group
+            {
+                GroupId = 2,
+                GroupName = "DefaultUsers"
             });
         }
     }
