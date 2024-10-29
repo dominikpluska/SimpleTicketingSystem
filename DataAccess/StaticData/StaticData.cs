@@ -16,6 +16,12 @@ namespace DataAccess.StaticData
             Administrator
         }
 
+        public enum TicketTypes
+        {
+            Incident,
+            Request
+        }
+
         public const string defaultAssingmentGroup = "HelpDesk";
 
         public static string ReturnConnectionString(string dataBase)

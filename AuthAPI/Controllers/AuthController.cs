@@ -204,6 +204,7 @@ namespace AuthAPI.Controllers
                     jwt.JwtToken = token;
 
                     _unitOfWorkJwt.JwtRepository.Add(jwt);
+                    _unitOfWorkJwt.SaveChanges();
 
                     _response.IsSuccess = true;
                     _response.Message = $"User {userAccountDto.UserName} has been logged";

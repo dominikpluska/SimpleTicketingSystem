@@ -9,9 +9,10 @@ using Microsoft.EntityFrameworkCore;
 
 namespace DataAccess.Models
 {
-    [Keyless]
     public class JWT
     {
+        [Key]
+        public int EntryId { get; set; }
         [Required]
         [ForeignKey("UserId")]
         public int UserId { get; set; }

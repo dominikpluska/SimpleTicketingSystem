@@ -9,5 +9,6 @@ namespace DataAccess.Repository.Interface
 {
     public interface IJwtRepository : IRepository<JWT>
     {
+
     }
 }
