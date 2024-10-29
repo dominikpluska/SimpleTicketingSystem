@@ -24,18 +24,20 @@ namespace AuthAPI.Controllers
         private readonly ICreateJwtToken _createJwtToken;
         private readonly IUnitOfWorkRole _unitOfWorkRole;
         private readonly IUnitOfWorkGroup _unitOfWorkGroup;
+        private readonly IUnitOfWorkJwt _unitOfWorkJwt;
         private readonly IGlobalServices _logService;
         private readonly ICookieGenerator _cookieGenerator;
         private readonly Response _response;
         private readonly Log _log;
 
         public AuthController(IUnitOfWorkAuth unitOfWorkAuth, IUnitOfWorkUser unitOfWorkUser, ICreateJwtToken createJwtToken,
-            IUnitOfWorkRole unitOfWorkRole, IUnitOfWorkGroup unitOfWorkGroup, IGlobalServices logService, ICookieGenerator cookieGenerator)
+            IUnitOfWorkRole unitOfWorkRole, IUnitOfWorkGroup unitOfWorkGroup, IUnitOfWorkJwt unitOfWorkJwt, IGlobalServices logService, ICookieGenerator cookieGenerator)
         {
             _unitOfWorkAuth = unitOfWorkAuth;
             _unitOfWorkUser = unitOfWorkUser;
             _unitOfWorkRole = unitOfWorkRole;
             _unitOfWorkGroup = unitOfWorkGroup;
+            _unitOfWorkJwt = unitOfWorkJwt;
             _createJwtToken = createJwtToken;
             _logService = logService;
             _cookieGenerator = cookieGenerator;
@@ -196,6 +198,12 @@ namespace AuthAPI.Controllers
                     };
                     var token = _createJwtToken.GenerateToken(jwtDto);
                     _cookieGenerator.CreateCookie(token, Response);
+
+                    JWT jwt = new();
+                    jwt.UserId = userAccount.UserId;
+                    jwt.JwtToken = token;
+
+                    _unitOfWorkJwt.JwtRepository.Add(jwt);
 
                     _response.IsSuccess = true;
                     _response.Message = $"User {userAccountDto.UserName} has been logged";

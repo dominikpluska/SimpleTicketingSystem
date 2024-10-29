@@ -28,6 +28,7 @@ builder.Services.AddScoped<IUnitOfWorkAuth, UnitOfWorkAuth>();
 builder.Services.AddScoped<IUnitOfWorkUser, UnitOfWorkUser>();
 builder.Services.AddScoped<IUnitOfWorkRole, UnitOfWorkRole>();
 builder.Services.AddScoped<IUnitOfWorkGroup, UnitOfWorkGroup>();
+builder.Services.AddScoped<IUnitOfWorkJwt, UnitOfWorkJwt>();
 builder.Services.AddScoped<ICreateJwtToken, CreateJwtToken>();
 builder.Services.AddScoped<ICookieGenerator, CookieGenerator>();
 builder.Services.AddScoped<IGlobalServices, Services>();

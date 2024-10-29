@@ -15,6 +15,8 @@ namespace DataAccess.Models
         [Required]
         public string UserName { get; set; }
         [Required]
+        public string TicketType { get; set; }
+        [Required]
         public string Severity { get; set; }
         public string AssigmentGroup { get; set; } = StaticData.StaticData.defaultAssingmentGroup;
         [Required]
