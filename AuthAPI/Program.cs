@@ -1,3 +1,4 @@
+using AuthAPI.CookieGenerator;
 using AuthAPI.Data;
 using AuthAPI.JwtGenerator;
 using AuthAPI.JwtGenerator.ICreateJwtToken;
@@ -28,6 +29,7 @@ builder.Services.AddScoped<IUnitOfWorkUser, UnitOfWorkUser>();
 builder.Services.AddScoped<IUnitOfWorkRole, UnitOfWorkRole>();
 builder.Services.AddScoped<IUnitOfWorkGroup, UnitOfWorkGroup>();
 builder.Services.AddScoped<ICreateJwtToken, CreateJwtToken>();
+builder.Services.AddScoped<ICookieGenerator, CookieGenerator>();
 builder.Services.AddScoped<IGlobalServices, Services>();
 
 var app = builder.Build();

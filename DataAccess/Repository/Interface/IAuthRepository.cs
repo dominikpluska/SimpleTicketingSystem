@@ -9,5 +9,6 @@ namespace DataAccess.Repository.Interface
 {
     public interface IAuthRepository : IRepository<UserAccount>
     {
+        public bool CheckIfUserExists(string userAccount);
     }
 }

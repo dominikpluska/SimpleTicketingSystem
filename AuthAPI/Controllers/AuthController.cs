@@ -1,11 +1,15 @@
-﻿using AuthAPI.Dto;
+﻿using AuthAPI.CookieGenerator;
+using AuthAPI.Data.Dtos;
+using AuthAPI.Dto;
 using AuthAPI.JwtGenerator.ICreateJwtToken;
 using AuthAPI.UnitOfWork;
 using AuthAPI.UnitOfWork.Interfaces;
+using BCrypt.Net;
 using DataAccess.Models;
 using GlobalServices.Interface;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json.Linq;
 using System.Collections.Generic;
 
 
@@ -21,11 +25,12 @@ namespace AuthAPI.Controllers
         private readonly IUnitOfWorkRole _unitOfWorkRole;
         private readonly IUnitOfWorkGroup _unitOfWorkGroup;
         private readonly IGlobalServices _logService;
+        private readonly ICookieGenerator _cookieGenerator;
         private readonly Response _response;
         private readonly Log _log;
 
         public AuthController(IUnitOfWorkAuth unitOfWorkAuth, IUnitOfWorkUser unitOfWorkUser, ICreateJwtToken createJwtToken,
-            IUnitOfWorkRole unitOfWorkRole, IUnitOfWorkGroup unitOfWorkGroup, IGlobalServices logService)
+            IUnitOfWorkRole unitOfWorkRole, IUnitOfWorkGroup unitOfWorkGroup, IGlobalServices logService, ICookieGenerator cookieGenerator)
         {
             _unitOfWorkAuth = unitOfWorkAuth;
             _unitOfWorkUser = unitOfWorkUser;
@@ -33,6 +38,7 @@ namespace AuthAPI.Controllers
             _unitOfWorkGroup = unitOfWorkGroup;
             _createJwtToken = createJwtToken;
             _logService = logService;
+            _cookieGenerator = cookieGenerator;
             _log = new Log();
             _response = new Response();
         }
@@ -56,6 +62,7 @@ namespace AuthAPI.Controllers
                     _log.Message = _response.Message;
 
                     _logService.WriteLog(_log);
+                    return StatusCode(500, _response);
                 }
                 else
                 {
@@ -78,6 +85,7 @@ namespace AuthAPI.Controllers
                         _log.Message = _response.Message;
 
                         _logService.WriteLog(_log);
+                        return StatusCode(500, _response);
                     }
 
                     userAccount.RoleId  = await _unitOfWorkRole.RoleRepository.GetRoleId(userAccountDto.SelectedRole);
@@ -94,6 +102,7 @@ namespace AuthAPI.Controllers
                         _log.Message = _response.Message;
 
                         _logService.WriteLog(_log);
+                        return StatusCode(500, _response);
                     }
 
                     userAccount.GroupId = await _unitOfWorkGroup.GroupRepository.GetGroupId(userAccountDto.SelectedGroup);
@@ -117,11 +126,106 @@ namespace AuthAPI.Controllers
             }
             catch (Exception ex)
             {
-                return _response;
+                _response.IsSuccess = false;
+                _response.Message = ex.Message.ToString();
+                _response.Data = null;
+
+                _log.ServiceName = "AuthAPI";
+                _log.LogType = "Error";
+                _log.UserName = "string";
+                _log.Message = _response.Message;
+
+                _logService.WriteLog(_log);
+
+                return StatusCode(500, _response);
             }
 
             return _response;
         }
 
+        [HttpPost("Login")]
+        public async Task<ActionResult<Response>> Login(UserAccountDto userAccountDto)
+        {
+            try
+            {
+                UserAccount userAccount = new();
+                Role role = new();
+
+                if (!_unitOfWorkAuth.AuthRepository.CheckIfUserExists(userAccountDto.UserName))
+                {
+                    _response.IsSuccess = false;
+                    _response.Message = $"User Or Password was Incorrect!";
+                    _response.Data = null;
+
+                    _log.ServiceName = "AuthAPI";
+                    _log.LogType = "Error";
+                    _log.UserName = "AuthAPI";
+                    _log.Message = _response.Message;
+
+                    _logService.WriteLog(_log);
+                    return StatusCode(500, _response);
+                }
+                else
+                {
+                    userAccount = await _unitOfWorkAuth.AuthRepository.GetFirstOrDefault(x => x.UserName == userAccountDto.UserName);
+                    role = await _unitOfWorkRole.RoleRepository.GetFirstOrDefault(x => x.RoleId == userAccount.RoleId);
+                }
+
+                if (!BCrypt.Net.BCrypt.Verify(userAccountDto.Password, userAccount!.PasswordHash))
+                {
+                    _response.IsSuccess = false;
+                    _response.Message = $"User Or Password was Incorrect!";
+                    _response.Data = null;
+
+                    _log.ServiceName = "AuthAPI";
+                    _log.LogType = "Error";
+                    _log.UserName = "AuthAPI";
+                    _log.Message = _response.Message;
+
+                    _logService.WriteLog(_log);
+                    return StatusCode(500, _response);
+                }
+
+                else
+                {
+                    JwtDto jwtDto = new JwtDto()
+                    {
+                        Username = userAccount.UserName,
+                        Role = role.RoleName,
+
+                    };
+                    var token = _createJwtToken.GenerateToken(jwtDto);
+                    _cookieGenerator.CreateCookie(token, Response);
+
+                    _response.IsSuccess = true;
+                    _response.Message = $"User {userAccountDto.UserName} has been logged";
+                    _response.Data = token;
+                }
+
+                _log.ServiceName = "AuthAPI";
+                _log.LogType = "Info";
+                _log.UserName = userAccountDto.UserName;
+                _log.Message = _response.Message;
+
+                _logService.WriteLog(_log);
+
+            }
+            catch (Exception ex)
+            {
+                _response.IsSuccess = false;
+                _response.Message = ex.Message.ToString();
+                _response.Data = null;
+
+                _log.ServiceName = "AuthAPI";
+                _log.LogType = "Error";
+                _log.UserName = "string";
+                _log.Message = _response.Message;
+
+                _logService.WriteLog(_log);
+
+                return StatusCode(500, _response);
+            }
+            return _response;
+        }
     }
 }

@@ -33,13 +33,10 @@ namespace AuthAPI.JwtGenerator
         public string GenerateToken(JwtDto jwtDto)
         {
             List<Claim> claims = new();
-            foreach (var claim in jwtDto.Roles)
-            {
-                claims.Add(new Claim(ClaimTypes.Role, claim));
-            }
+            claims.Add(new Claim(ClaimTypes.Role, jwtDto.Role));
 
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_tokenString));
-            var credentials = new SigningCredentials(key, SecurityAlgorithms.HmacSha512);
+            var credentials = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
 
             var token = new JwtSecurityToken(
                 issuer: _issuer,
