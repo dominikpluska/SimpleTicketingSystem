@@ -17,6 +17,9 @@ namespace DataAccess.Models
         [Required]
         public string TicketType { get; set; }
         [Required]
+        [ForeignKey("CategoryId")]
+        public int CategoryId { get; set; } = 11;
+        [Required]
         public string Severity { get; set; }
         public string AssigmentGroup { get; set; } = StaticData.StaticData.defaultAssingmentGroup;
         [Required]
