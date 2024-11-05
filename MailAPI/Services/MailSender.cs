@@ -85,7 +85,7 @@ namespace MailAPI.Services
             }
             catch (InvalidOperationException ex)
             {
-                throw new InvalidOperationException($"Invali dOperation Exception occured : \n {ex}");
+                throw new InvalidOperationException($"Invalid Operation Exception occured : \n {ex}");
             }
         }
     }

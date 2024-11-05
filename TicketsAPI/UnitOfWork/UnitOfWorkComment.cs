@@ -1,19 +1,20 @@
-﻿using DataAccess.Repository;
+﻿using DataAccess.Models;
+using DataAccess.Repository;
 using DataAccess.Repository.Interface;
 using Microsoft.EntityFrameworkCore;
 using TicketsAPI.Data;
 
 namespace TicketsAPI.UnitOfWork
 {
-    public class UnitOfWork : IUnitOfWork
+    public class UnitOfWorkComment : IUnitOfWorkComment
     {
-        public ITicketRepository TicketRepository { get; private set; }
+        public ICommentRepository CommentRepository {  get; private set; }
         private readonly DbContext _context;
 
-        public UnitOfWork(ApplicationDbContext context)
+        public UnitOfWorkComment(ApplicationDbContext context)
         {
             _context = context;
-            TicketRepository = new TicketRepository(_context);
+            CommentRepository = new CommentRepository(_context);
         }
 
         public void SaveChanges()

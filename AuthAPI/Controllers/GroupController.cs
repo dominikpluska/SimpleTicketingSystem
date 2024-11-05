@@ -176,7 +176,7 @@ namespace AuthAPI.Controllers
         }
 
         [HttpDelete("DleteGroup/{id}")]
-        public async Task<ActionResult<Response>> DleteGroup(int id)
+        public async Task<ActionResult<Response>> DeleteGroup(int id)
         {
             try
             {

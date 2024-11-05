@@ -23,7 +23,8 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 builder.Services.AddHttpClient("Log", x => x.BaseAddress = new Uri("https://localhost:7201"));
-builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
+builder.Services.AddScoped<IUnitOfWorkTicket, UnitOfWorkTicket>();
+builder.Services.AddScoped<IUnitOfWorkCategory, UnitOfWorkCategory>();
 builder.Services.AddScoped<IGlobalServices, Services>();
 
 var app = builder.Build();

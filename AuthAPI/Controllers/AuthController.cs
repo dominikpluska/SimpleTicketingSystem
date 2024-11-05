@@ -156,7 +156,7 @@ namespace AuthAPI.Controllers
                 if (!_unitOfWorkAuth.AuthRepository.CheckIfUserExists(userAccountDto.UserName))
                 {
                     _response.IsSuccess = false;
-                    _response.Message = $"User Or Password was Incorrect!";
+                    _response.Message = $"Username Or Password was Incorrect!";
                     _response.Data = null;
 
                     _log.ServiceName = "AuthAPI";
@@ -176,7 +176,7 @@ namespace AuthAPI.Controllers
                 if (!BCrypt.Net.BCrypt.Verify(userAccountDto.Password, userAccount!.PasswordHash))
                 {
                     _response.IsSuccess = false;
-                    _response.Message = $"User Or Password was Incorrect!";
+                    _response.Message = $"Username Or Password was Incorrect!";
                     _response.Data = null;
 
                     _log.ServiceName = "AuthAPI";

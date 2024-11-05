@@ -3,7 +3,7 @@ using DataAccess.Repository.Interface;
 
 namespace TicketsAPI.UnitOfWork
 {
-    public interface IUnitOfWork
+    public interface IUnitOfWorkTicket
     {
         public ITicketRepository TicketRepository { get; }
 

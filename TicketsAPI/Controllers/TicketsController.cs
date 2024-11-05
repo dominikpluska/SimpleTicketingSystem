@@ -12,14 +12,14 @@ namespace TicketsAPI.Controllers
     [ApiController]
     public class TicketsController : ControllerBase
     {
-        private readonly IUnitOfWork _unitOfWork;
+        private readonly IUnitOfWorkTicket _unitOfWorkTicket;
         private readonly IGlobalServices _logService;
         private readonly Response _response;
         private readonly Log _log;
         
-        public TicketsController(IUnitOfWork unitOfWork, IGlobalServices logService)
+        public TicketsController(IUnitOfWorkTicket unitOfWorkTicket, IGlobalServices logService)
         {
-            _unitOfWork = unitOfWork;
+            _unitOfWorkTicket = unitOfWorkTicket;
             _logService = logService;
 
             _response = new Response();
@@ -31,7 +31,7 @@ namespace TicketsAPI.Controllers
         {
             try
             {
-                var list = await _unitOfWork.TicketRepository.GetAll();
+                var list = await _unitOfWorkTicket.TicketRepository.GetAll();
                 _response.IsSuccess = true;
                 _response.Message = $"All tickets have been retrived by the controller";
                 _response.Data = list;
@@ -66,7 +66,7 @@ namespace TicketsAPI.Controllers
         {
             try
             {
-                var ticket = await _unitOfWork.TicketRepository.GetFirstOrDefault(x => x.TicketId == id);
+                var ticket = await _unitOfWorkTicket.TicketRepository.GetFirstOrDefault(x => x.TicketId == id);
                 _response.IsSuccess = true;
                 _response.Message = $"Ticket with the Id of {id} tickets has been retrived by the string";
                 _response.Data = ticket;
@@ -100,7 +100,7 @@ namespace TicketsAPI.Controllers
         {
             try
             {
-                var list = await _unitOfWork.TicketRepository.Get(x => x.TicketType == ticketType);
+                var list = await _unitOfWorkTicket.TicketRepository.Get(x => x.TicketType == ticketType);
                 _response.IsSuccess = true;
                 _response.Message = $"All tickets have been retrived by the controller";
                 _response.Data = list;
@@ -135,8 +135,8 @@ namespace TicketsAPI.Controllers
         {
             try
             {
-                _unitOfWork.TicketRepository.Add(ticket);
-                _unitOfWork.SaveChanges();
+                _unitOfWorkTicket.TicketRepository.Add(ticket);
+                _unitOfWorkTicket.SaveChanges();
                 _response.IsSuccess = true;
                 _response.Message = $"New ticket {ticket.TicketId}  has been added by {ticket.UserName}";
                 _response.Data = ticket;
@@ -173,8 +173,8 @@ namespace TicketsAPI.Controllers
         {
             try
             {
-                 _unitOfWork.TicketRepository.Update(ticket);
-                 _unitOfWork.SaveChanges();
+                 _unitOfWorkTicket.TicketRepository.Update(ticket);
+                 _unitOfWorkTicket.SaveChanges();
                  _response.IsSuccess = true;
                  _response.Message = $"New ticket {ticket.TicketId}  has been updated by string";
                  _response.Data = null;

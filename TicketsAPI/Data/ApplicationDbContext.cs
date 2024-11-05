@@ -15,76 +15,67 @@ namespace TicketsAPI.Data
 
         public DbSet<Category> Categories { get; set; }
 
+        public DbSet<Comment> Comments { get; set; }
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
 
-            modelBuilder.Entity<Category>().HasData(new Category
-            {
-                CategoryId = 1,
-                CategoryName = "Desktops/Laptops"
-            });
+            List<Category> categories = new List<Category> { 
+                new Category {
+                    CategoryId = 1,
+                    CategoryName = "Desktops/Laptops"
+                },
+                new Category {
+                    CategoryId = 2,
+                    CategoryName = "Mobile Devices"
+                },
+                new Category {
+                    CategoryId = 3,
+                    CategoryName = "Printers and Scanners"
+                },
+                new Category {
+                    CategoryId = 4,
+                    CategoryName = "Operating Systems"
+                },
+                new Category {
+                    CategoryId = 5,
+                    CategoryName = "Applications"
+                },
+                new Category {
+                    CategoryId = 6,
+                    CategoryName = "Email"
+                },
+                new Category {
+                    CategoryId = 7,
+                    CategoryName = "Connectivity"
+                },
+                new Category {
+                    CategoryId = 8,
+                    CategoryName = "Security"
+                },
+                new Category {
+                    CategoryId = 9,
+                    CategoryName = "User Accounts"
+                },
+                new Category {
+                    CategoryId = 10,
+                    CategoryName = "File and Resource Access"
+                },
+                new Category {
+                    CategoryId = 11,
+                    CategoryName = "Other"
+                },
+            };
 
-            modelBuilder.Entity<Category>().HasData(new Category
+            foreach (var category in categories)
             {
-                CategoryId = 2,
-                CategoryName = "Mobile Devices"
-            });
-
-            modelBuilder.Entity<Category>().HasData(new Category
-            {
-                CategoryId = 3,
-                CategoryName = "Printers and Scanners"
-            });
-
-            modelBuilder.Entity<Category>().HasData(new Category
-            {
-                CategoryId = 4,
-                CategoryName = "Operating Systems"
-            });
-
-            modelBuilder.Entity<Category>().HasData(new Category
-            {
-                CategoryId = 5,
-                CategoryName = "Applications"
-            });
-
-            modelBuilder.Entity<Category>().HasData(new Category
-            {
-                CategoryId = 6,
-                CategoryName = "Email"
-            });
-
-            modelBuilder.Entity<Category>().HasData(new Category
-            {
-                CategoryId = 7,
-                CategoryName = "Connectivity"
-            });
-
-            modelBuilder.Entity<Category>().HasData(new Category
-            {
-                CategoryId = 8,
-                CategoryName = "Security"
-            });
-
-            modelBuilder.Entity<Category>().HasData(new Category
-            {
-                CategoryId = 9,
-                CategoryName = "User Accounts"
-            });
-
-            modelBuilder.Entity<Category>().HasData(new Category
-            {
-                CategoryId = 10,
-                CategoryName = "File and Resource Access"
-            });
-
-            modelBuilder.Entity<Category>().HasData(new Category
-            {
-                CategoryId = 11,
-                CategoryName = "Other"
-            });
-
+                modelBuilder.Entity<Category>().HasData(new Category
+                {
+                    CategoryId = category.CategoryId,
+                    CategoryName = category.CategoryName
+                });
+            }
         }
     }
 }
