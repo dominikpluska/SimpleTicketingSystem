@@ -135,17 +135,112 @@ namespace TicketsAPI.Controllers
         }
 
         [HttpPut("UpdateCategory/{id}")]
-        public async Task<ActionResult<Response>> UpdateCategory(int id, Category group)
+        public async Task<ActionResult<Response>> UpdateCategory(int id, Category categoryNew)
         {
             try
             {
+                var category = await _unitOfWorkCategory.CategoryRepository.GetFirstOrDefault(x => x.CategoryId == id);
+                if (category != null)
+                {
+                    categoryNew.CategoryId = category.CategoryId;
+                    _unitOfWorkCategory.CategoryRepository.Update(categoryNew);
+                    _unitOfWorkCategory.SaveChanges();
 
+                    _response.IsSuccess = true;
+                    _response.Message = $"The category {category.CategoryName} has been updated";
+                    _response.Data = null;
+
+                    _log.ServiceName = "TicketsAPI";
+                    _log.LogType = "Error";
+                    _log.UserName = "string";
+                    _log.Message = _response.Message;
+
+                    _logService.WriteLog(_log);
+                }
+                else
+                {
+                    _response.IsSuccess = false;
+                    _response.Message = $"The category of {id} has not been found!";
+                    _response.Data = null;
+
+                    _log.ServiceName = "TicketsAPI";
+                    _log.LogType = "Error";
+                    _log.UserName = "string";
+                    _log.Message = _response.Message;
+
+                    _logService.WriteLog(_log);
+                }
             }
             catch (Exception ex)
             {
+                _response.IsSuccess = false;
+                _response.Message = ex.Message.ToString();
+                _response.Data = null;
 
+                _log.ServiceName = "TicketsAPI";
+                _log.LogType = "Error";
+                _log.UserName = "string";
+                _log.Message = _response.Message;
+
+                _logService.WriteLog(_log);
+
+                return StatusCode(500, _response);
             }
             return _response;
         }   
+
+        public async Task<ActionResult<Response>> DeleteCategory(int id)
+        {
+            try
+            {
+                var category = await _unitOfWorkCategory.CategoryRepository.GetFirstOrDefault(x => x.CategoryId == id);
+                if (category != null)
+                {
+                    _unitOfWorkCategory.CategoryRepository.Remove(category);
+                    _unitOfWorkCategory.SaveChanges();
+                    _response.IsSuccess = true;
+                    _response.Message = $"The category {category.CategoryName} has been deleted";
+                    _response.Data = null;
+
+                    _log.ServiceName = "TicketsAPI";
+                    _log.LogType = "Error";
+                    _log.UserName = "string";
+                    _log.Message = _response.Message;
+
+                    _logService.WriteLog(_log);
+                }
+                else
+                {
+                    _response.IsSuccess = false;
+                    _response.Message = $"The category of {id} has not been found!";
+                    _response.Data = null;
+
+                    _log.ServiceName = "TicketsAPI";
+                    _log.LogType = "Error";
+                    _log.UserName = "string";
+                    _log.Message = _response.Message;
+
+                    _logService.WriteLog(_log);
+                }
+                
+            }
+            catch(Exception ex)
+            {
+                _response.IsSuccess = false;
+                _response.Message = ex.Message.ToString();
+                _response.Data = null;
+
+                _log.ServiceName = "TicketsAPI";
+                _log.LogType = "Error";
+                _log.UserName = "string";
+                _log.Message = _response.Message;
+
+                _logService.WriteLog(_log);
+
+                return StatusCode(500, _response);
+            }
+
+            return _response;
+        }
     }
 }

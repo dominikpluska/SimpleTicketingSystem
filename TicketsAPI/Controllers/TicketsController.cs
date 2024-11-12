@@ -169,23 +169,43 @@ namespace TicketsAPI.Controllers
         }
 
         [HttpPut("UpdateTicket/{id}")]
-        public async Task<ActionResult<Response>> UpdateTicket(int id, Ticket ticket)
+        public async Task<ActionResult<Response>> UpdateTicket(int id, Ticket ticketNew)
         {
             try
             {
-                 _unitOfWorkTicket.TicketRepository.Update(ticket);
-                 _unitOfWorkTicket.SaveChanges();
-                 _response.IsSuccess = true;
-                 _response.Message = $"New ticket {ticket.TicketId}  has been updated by string";
-                 _response.Data = null;
 
+                var ticket = await _unitOfWorkTicket.TicketRepository.GetFirstOrDefault(x => x.TicketId == id);
 
-                 _log.ServiceName = "TicketAPI";
-                 _log.LogType = "Info";
-                 _log.UserName = ticket.UserName;
-                 _log.Message = _response.Message;
+                if (ticket != null)
+                {
+                    ticketNew.TicketId = ticket.TicketId;
+                    _unitOfWorkTicket.TicketRepository.Update(ticketNew);
+                    _unitOfWorkTicket.SaveChanges();
+                    _response.IsSuccess = true;
+                    _response.Message = $"New ticket {ticket.TicketId}  has been updated by string";
+                    _response.Data = null;
 
-                 _logService.WriteLog(_log);
+                    _log.ServiceName = "TicketAPI";
+                    _log.LogType = "Info";
+                    _log.UserName = ticket.UserName;
+                    _log.Message = _response.Message;
+
+                    _logService.WriteLog(_log);
+
+                }
+                else
+                {
+                    _response.IsSuccess = false;
+                    _response.Message = $"Ticket with the id of {id} has not been found!";
+                    _response.Data = "Error";
+
+                    _log.ServiceName = "TicketAPI";
+                    _log.UserName = "string";
+                    _log.Message = _response.Message;
+
+                    _logService.WriteLog(_log);
+                }
+
             }
             catch (Exception ex)
             {
