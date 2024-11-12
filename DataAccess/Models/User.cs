@@ -17,12 +17,15 @@ namespace DataAccess.Models
         [Required]
         public string LastName { get; set; }
         [Required]
-        public string Email { get; set; }
-        public string PhoneNumber { get; set; }
+        public string Email { get; set; } = string.Empty;
+        public string PhoneNumber { get; set; } = string.Empty;
         public string Position { get; set; }
 
         [Required]
         public bool IsVIP { get; set; } = false;
+
+        [Required]
+        public bool isActive { get; set; } = true;
 
     }
 }

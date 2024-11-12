@@ -17,9 +17,9 @@ namespace AuthAPI.UnitOfWork
             UserRepository = new UserRepository(_context);
         }
 
-        public void SaveChanges()
+        public async void SaveChanges()
         {
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
         }
     }
 }

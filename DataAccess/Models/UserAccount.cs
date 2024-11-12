@@ -12,7 +12,7 @@ namespace DataAccess.Models
     public class UserAccount
     {
         [Key]
-        public int Id { get; set; }
+        public int UserAccountId { get; set; }
         [Required]
         [ForeignKey("UserId")]
         public int UserId { get; set; }
@@ -28,6 +28,6 @@ namespace DataAccess.Models
         [ForeignKey("GroupId")]
         public int GroupId { get; set; }
 
-        public bool IsActived { get; set; } = true;
+        public bool IsActive { get; set; } = true;
     }
 }
