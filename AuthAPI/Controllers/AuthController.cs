@@ -292,5 +292,67 @@ namespace AuthAPI.Controllers
             }
             return _response;
         }
+
+        [HttpGet("GetAllAccounts")]
+        public async Task<ActionResult<Response>> GetAllAccounts()
+        {
+            try
+            {
+                var userAccounts = await _unitOfWorkAuth.AuthRepository.GetAll();
+                _response.IsSuccess = true;
+                _response.Message = "All accounts have been retrived!";
+                _response.Data = userAccounts;
+
+                _log.ServiceName = "AuthAPI";
+                _log.LogType = "Info";
+                _log.UserName = "string";
+                _log.Message = "All accounts have been retrived!";
+                _logService.WriteLog(_log);
+            }
+            catch(Exception ex) 
+            {
+                _response.IsSuccess = false;
+                _response.Message = ex.Message.ToString();
+                _response.Data = null;
+
+                _log.ServiceName = "AuthAPI";
+                _log.LogType = "Error";
+                _log.UserName = "string";
+                _log.Message = ex.Message.ToString();
+                _logService.WriteLog(_log);
+            }
+            return _response;
+        }
+
+        [HttpGet("GetUserAccount/{id}")]
+        public async Task<ActionResult<Response>> GetUserAccount(int id)
+        {
+            try
+            {
+                var userAccount = await _unitOfWorkAuth.AuthRepository.GetFirstOrDefault(x => x.UserId == id);
+                _response.IsSuccess = true;
+                _response.Message = "Account has been retrived!";
+                _response.Data = userAccount;
+
+                _log.ServiceName = "AuthAPI";
+                _log.LogType = "Info";
+                _log.UserName = "string";
+                _log.Message = "Account has been retrived!";
+                _logService.WriteLog(_log);
+            }
+            catch (Exception ex)
+            {
+                _response.IsSuccess = false;
+                _response.Message = ex.Message.ToString();
+                _response.Data = null;
+
+                _log.ServiceName = "AuthAPI";
+                _log.LogType = "Error";
+                _log.UserName = "string";
+                _log.Message = ex.Message.ToString();
+                _logService.WriteLog(_log);
+            }
+            return _response;
+        }
     }
 }
