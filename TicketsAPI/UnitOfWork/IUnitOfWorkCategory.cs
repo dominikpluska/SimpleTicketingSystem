@@ -6,6 +6,6 @@ namespace TicketsAPI.UnitOfWork
     {
         public ICategoryRepository CategoryRepository { get; }
 
-        public void SaveChanges();
+        public Task SaveChanges();
     }
 }

@@ -48,7 +48,11 @@ void SeedDataBase()
     {
         var dbContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
         dbContext.Database.EnsureCreated();
-        dbContext.Database.Migrate();
+        if (dbContext.Database.GetPendingMigrations().Any())
+        {
+            dbContext.Database.Migrate();
+        }
+
         dbContext.Database.CloseConnection();
     }
 }

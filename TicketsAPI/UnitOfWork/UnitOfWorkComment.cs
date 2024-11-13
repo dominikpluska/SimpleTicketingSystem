@@ -17,7 +17,7 @@ namespace TicketsAPI.UnitOfWork
             CommentRepository = new CommentRepository(_context);
         }
 
-        public async void SaveChanges()
+        public async Task SaveChanges()
         {
             await _context.SaveChangesAsync();
         }

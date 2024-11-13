@@ -110,7 +110,7 @@ namespace AuthAPI.Controllers
                     userAccount.GroupId = await _unitOfWorkGroup.GroupRepository.GetGroupId(userAccountDto.SelectedGroup);
 
                     _unitOfWorkAuth.AuthRepository.Add(userAccount);
-                    _unitOfWorkAuth.SaveChanges();
+                    await _unitOfWorkAuth.SaveChanges();
 
 
                     _response.IsSuccess = true;
@@ -204,7 +204,7 @@ namespace AuthAPI.Controllers
                     jwt.JwtToken = token;
 
                     _unitOfWorkJwt.JwtRepository.Add(jwt);
-                    _unitOfWorkJwt.SaveChanges();
+                    await _unitOfWorkJwt.SaveChanges();
 
                     _response.IsSuccess = true;
                     _response.Message = $"User {userAccountDto.UserName} has been logged";
@@ -247,7 +247,7 @@ namespace AuthAPI.Controllers
                 {
                     userAccount.IsActive = false;
                     _unitOfWorkAuth.AuthRepository.Update(userAccount);
-                    _unitOfWorkAuth.SaveChanges();
+                    await _unitOfWorkAuth.SaveChanges();
 
                     _response.IsSuccess = true;
                     _response.Message = $"{userAccount.UserName} has been disabled!";

@@ -24,9 +24,7 @@ namespace GlobalServices
 
         public async void WriteLog(Log log)
         {
-
             ApiOperation(log, "Log", $"/api/log/WriteLog");
-
         }
 
         private async void ApiOperation(object data, string clientName, string apiPath)

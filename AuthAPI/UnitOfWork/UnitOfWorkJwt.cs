@@ -17,7 +17,7 @@ namespace AuthAPI.UnitOfWork
             JwtRepository = new JwtRepository(_context);
         }
 
-        public async void SaveChanges()
+        public async Task SaveChanges()
         {
             await _context.SaveChangesAsync();
         }

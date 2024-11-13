@@ -6,6 +6,6 @@ namespace AuthAPI.UnitOfWork.Interfaces
     {
         public IJwtRepository JwtRepository { get; }
 
-        public void SaveChanges();
+        public Task SaveChanges();
     }
 }

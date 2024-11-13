@@ -22,7 +22,7 @@ namespace LogAPI.UnitOfWork
             LogRepository = new LogRepository(_context);
         }
 
-        public async void SaveChanges()
+        public async Task SaveChanges()
         {
             await _context.SaveChangesAsync();
         }

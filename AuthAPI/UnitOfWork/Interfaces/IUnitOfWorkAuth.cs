@@ -11,6 +11,6 @@ namespace AuthAPI.UnitOfWork.Interfaces
     {
         public IAuthRepository AuthRepository { get; }
 
-        public void SaveChanges();
+        public Task SaveChanges();
     }
 }

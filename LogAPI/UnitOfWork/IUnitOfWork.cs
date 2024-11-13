@@ -11,6 +11,6 @@ namespace LogAPI.UnitOfWork
     {
         public ILogRepository LogRepository { get; }
 
-        public void SaveChanges();
+        public Task SaveChanges();
     }
 }

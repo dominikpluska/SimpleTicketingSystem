@@ -52,7 +52,7 @@ namespace AuthAPI.Controllers
 
                 _logService.WriteLog(_log);
 
-                _unitOfWorkUser.SaveChanges();
+                await _unitOfWorkUser.SaveChanges();
             }
             catch (Exception ex)
             {
@@ -154,7 +154,7 @@ namespace AuthAPI.Controllers
                 {
                     userNew.UserId = id;
                     _unitOfWorkUser.UserRepository.Update(user);
-                    _unitOfWorkUser.SaveChanges();
+                    await _unitOfWorkUser.SaveChanges();
 
                     _response.IsSuccess = true;
                     _response.Message = $"{userNew.Name} has been updated!";

@@ -6,6 +6,6 @@ namespace AuthAPI.UnitOfWork.Interfaces
     {
         public IGroupRepository GroupRepository { get; }
 
-        public void SaveChanges();
+        public Task SaveChanges();
     }
 }

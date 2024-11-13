@@ -131,12 +131,12 @@ namespace TicketsAPI.Controllers
         }
 
         [HttpPost("PostNewTicket")]
-        public ActionResult<Response> PostNewTicket(Ticket ticket)
+        public async  Task<ActionResult<Response>> PostNewTicket(Ticket ticket)
         {
             try
             {
                 _unitOfWorkTicket.TicketRepository.Add(ticket);
-                _unitOfWorkTicket.SaveChanges();
+                await _unitOfWorkTicket.SaveChanges();
                 _response.IsSuccess = true;
                 _response.Message = $"New ticket {ticket.TicketId}  has been added by {ticket.UserName}";
                 _response.Data = ticket;
@@ -180,7 +180,7 @@ namespace TicketsAPI.Controllers
                 {
                     ticketNew.TicketId = ticket.TicketId;
                     _unitOfWorkTicket.TicketRepository.Update(ticketNew);
-                    _unitOfWorkTicket.SaveChanges();
+                    await _unitOfWorkTicket.SaveChanges();
                     _response.IsSuccess = true;
                     _response.Message = $"New ticket {ticket.TicketId}  has been updated by string";
                     _response.Data = null;

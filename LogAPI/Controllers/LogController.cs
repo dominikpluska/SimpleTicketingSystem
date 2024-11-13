@@ -58,12 +58,12 @@ namespace LogAPI.Controllers
         }
 
         [HttpPost("WriteLog")]
-        public ActionResult<Response> WriteLog(Log log)
+        public async Task<ActionResult<Response>> WriteLog(Log log)
         {
             try
             {
                 _unitOfWork.LogRepository.Add(log);
-                _unitOfWork.SaveChanges();
+                await _unitOfWork.SaveChanges();
                 _response.IsSuccess = true;
                 _response.Message = "Log Added";
                 _response.Data = log;

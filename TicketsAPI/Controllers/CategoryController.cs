@@ -11,7 +11,6 @@ namespace TicketsAPI.Controllers
     [ApiController]
     public class CategoryController : ControllerBase
     {
-        //To be continued
         private readonly IUnitOfWorkCategory _unitOfWorkCategory;
         private readonly IGlobalServices _logService;
         private readonly Response _response;
@@ -40,7 +39,7 @@ namespace TicketsAPI.Controllers
                 _log.UserName = "string";
                 _log.Message = _response.Message;
 
-                _logService.WriteLog(_log);
+                //_logService.WriteLog(_log);
             }
             catch (Exception ex)
             {
@@ -102,7 +101,7 @@ namespace TicketsAPI.Controllers
             try
             {
                 _unitOfWorkCategory.CategoryRepository.Add(category);
-                _unitOfWorkCategory.SaveChanges();
+                await _unitOfWorkCategory.SaveChanges();
 
                 _response.IsSuccess = true;
                 _response.Message = $"{category.CategoryName} has been added to the table by string";
@@ -144,7 +143,7 @@ namespace TicketsAPI.Controllers
                 {
                     categoryNew.CategoryId = category.CategoryId;
                     _unitOfWorkCategory.CategoryRepository.Update(categoryNew);
-                    _unitOfWorkCategory.SaveChanges();
+                    await _unitOfWorkCategory.SaveChanges();
 
                     _response.IsSuccess = true;
                     _response.Message = $"The category {category.CategoryName} has been updated";
@@ -198,7 +197,7 @@ namespace TicketsAPI.Controllers
                 if (category != null)
                 {
                     _unitOfWorkCategory.CategoryRepository.Remove(category);
-                    _unitOfWorkCategory.SaveChanges();
+                    await _unitOfWorkCategory.SaveChanges();
                     _response.IsSuccess = true;
                     _response.Message = $"The category {category.CategoryName} has been deleted";
                     _response.Data = null;

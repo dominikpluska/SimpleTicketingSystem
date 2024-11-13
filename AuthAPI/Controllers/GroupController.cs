@@ -104,7 +104,7 @@ namespace AuthAPI.Controllers
             try
             {
                 _unitOfWorkGroup.GroupRepository.Add(group);
-                _unitOfWorkGroup.SaveChanges();
+                await _unitOfWorkGroup.SaveChanges();
 
                 _response.IsSuccess = true;
                 _response.Message = $"{group.GroupName} has been added to the table by string";
@@ -147,7 +147,7 @@ namespace AuthAPI.Controllers
                 {
                     groupNew.GroupId = group.GroupId;
                     _unitOfWorkGroup.GroupRepository.Update(groupNew);
-                    _unitOfWorkGroup.SaveChanges();
+                    await _unitOfWorkGroup.SaveChanges();
 
                     _response.IsSuccess = true;
                     _response.Message = $"{group.GroupName} has been modified!";
@@ -204,7 +204,7 @@ namespace AuthAPI.Controllers
                 if (group != null)
                 {
                     _unitOfWorkGroup.GroupRepository.Remove(group);
-                    _unitOfWorkGroup.SaveChanges();
+                    await _unitOfWorkGroup.SaveChanges();
 
                     _response.IsSuccess = true;
                     _response.Message = $"{group.GroupName} has been removed by string";

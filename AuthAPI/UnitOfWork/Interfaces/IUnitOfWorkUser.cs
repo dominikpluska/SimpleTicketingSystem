@@ -6,6 +6,6 @@ namespace AuthAPI.UnitOfWork.Interfaces
     {
         public IUserRepository UserRepository { get; }
 
-        public void SaveChanges();
+        public Task SaveChanges();
     }
 }

@@ -7,7 +7,7 @@ namespace TicketsAPI.UnitOfWork
     {
         public ITicketRepository TicketRepository { get; }
 
-        public void SaveChanges();
+        public Task SaveChanges();
 
     }
 }

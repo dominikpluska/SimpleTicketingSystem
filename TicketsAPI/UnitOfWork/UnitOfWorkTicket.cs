@@ -16,7 +16,7 @@ namespace TicketsAPI.UnitOfWork
             TicketRepository = new TicketRepository(_context);
         }
 
-        public async void SaveChanges()
+        public async Task SaveChanges()
         {
             await _context.SaveChangesAsync();
         }

@@ -6,6 +6,6 @@ namespace TicketsAPI.UnitOfWork
     {
         public ICommentRepository CommentRepository { get; }
 
-        public void SaveChanges();
+        public Task SaveChanges();
     }
 }
