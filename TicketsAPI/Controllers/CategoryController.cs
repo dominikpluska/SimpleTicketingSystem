@@ -187,8 +187,9 @@ namespace TicketsAPI.Controllers
                 return StatusCode(500, _response);
             }
             return _response;
-        }   
+        }
 
+        [HttpDelete("DeleteCategory/{id}")]
         public async Task<ActionResult<Response>> DeleteCategory(int id)
         {
             try

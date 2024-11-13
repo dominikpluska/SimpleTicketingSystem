@@ -16,9 +16,9 @@ namespace TicketsAPI.UnitOfWork
             CategoryRepository = new CategoryRepository(_context);
         }
 
-        public async void SaveChanges()
+        public void SaveChanges()
         {
-            await _context.SaveChangesAsync();
+             _context.SaveChangesAsync();
         }
     }
 }

@@ -4,6 +4,7 @@ using DataAccess.Models;
 using GlobalServices.Interface;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace AuthAPI.Controllers
 {
@@ -38,7 +39,7 @@ namespace AuthAPI.Controllers
         {
             try
             {
-                 _unitOfWorkUser.UserRepository.Add(user);
+                _unitOfWorkUser.UserRepository.Add(user);
 
                 _response.IsSuccess = true;
                 _response.Message = $"User {user.Email} added to the databse";
@@ -139,6 +140,60 @@ namespace AuthAPI.Controllers
 
                 _logService.WriteLog(_log);
                 return StatusCode(500, _response);
+            }
+            return _response;
+        }
+
+        [HttpPost("UpdateUser/{id}")]
+        public async Task<ActionResult<Response>> UpdateUser(int id, User userNew)
+        {
+            try
+            {
+                var user = await _unitOfWorkUser.UserRepository.GetFirstOrDefault(x => x.UserId == id);
+                if (user != null)
+                {
+                    userNew.UserId = id;
+                    _unitOfWorkUser.UserRepository.Update(user);
+                    _unitOfWorkUser.SaveChanges();
+
+                    _response.IsSuccess = true;
+                    _response.Message = $"{userNew.Name} has been updated!";
+                    _response.Data = userNew;
+
+                    _log.ServiceName = "AuthAPI";
+                    _log.LogType = "Info";
+                    _log.UserName = "string";
+                    _log.Message = _response.Message;
+
+                    _logService.WriteLog(_log);
+                }
+                else
+                {
+                    _response.IsSuccess = false;
+                    _response.Message = $"User with the id of {id} has not been found!";
+                    _response.Data = userNew;
+
+                    _log.ServiceName = "AuthAPI";
+                    _log.LogType = "Error";
+                    _log.UserName = "string";
+                    _log.Message = _response.Message;
+
+                    _logService.WriteLog(_log);
+                }
+            }
+            catch (Exception ex)
+            {
+                _response.IsSuccess = false;
+                _response.Message = ex.Message.ToString();
+                _response.Data = userNew;
+
+                _log.ServiceName = "AuthAPI";
+                _log.LogType = "Error";
+                _log.UserName = "string";
+                _log.Message = _response.Message;
+
+                _logService.WriteLog(_log);
+                _response.IsSuccess = false;
             }
             return _response;
         }

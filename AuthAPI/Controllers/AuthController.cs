@@ -90,9 +90,9 @@ namespace AuthAPI.Controllers
                         return StatusCode(500, _response);
                     }
 
-                    userAccount.RoleId  = await _unitOfWorkRole.RoleRepository.GetRoleId(userAccountDto.SelectedRole);
+                    userAccount.RoleId = await _unitOfWorkRole.RoleRepository.GetRoleId(userAccountDto.SelectedRole);
 
-                    if(string.IsNullOrEmpty(userAccountDto.SelectedGroup))
+                    if (string.IsNullOrEmpty(userAccountDto.SelectedGroup))
                     {
                         _response.IsSuccess = false;
                         _response.Message = $"User Account must have specified Group!";
@@ -218,6 +218,62 @@ namespace AuthAPI.Controllers
 
                 _logService.WriteLog(_log);
 
+            }
+            catch (Exception ex)
+            {
+                _response.IsSuccess = false;
+                _response.Message = ex.Message.ToString();
+                _response.Data = null;
+
+                _log.ServiceName = "AuthAPI";
+                _log.LogType = "Error";
+                _log.UserName = "string";
+                _log.Message = _response.Message;
+
+                _logService.WriteLog(_log);
+
+                return StatusCode(500, _response);
+            }
+            return _response;
+        }
+
+        [HttpPost("DisableAccount")]
+        public async Task<ActionResult<Response>> DisableAccount(int id)
+        {
+            try
+            {
+                var userAccount = await _unitOfWorkAuth.AuthRepository.GetFirstOrDefault(x => x.UserId == id);
+                if (userAccount != null)
+                {
+                    userAccount.IsActive = false;
+                    _unitOfWorkAuth.AuthRepository.Update(userAccount);
+                    _unitOfWorkAuth.SaveChanges();
+
+                    _response.IsSuccess = true;
+                    _response.Message = $"{userAccount.UserName} has been disabled!";
+                    _response.Data = null;
+
+                    _log.ServiceName = "AuthAPI";
+                    _log.LogType = "Error";
+                    _log.UserName = "string";
+                    _log.Message = _response.Message;
+
+                    _logService.WriteLog(_log);
+                }
+
+                else
+                {
+                    _response.IsSuccess = false;
+                    _response.Message = $"User with the id of {id} has not been found!";
+                    _response.Data = null;
+
+                    _log.ServiceName = "AuthAPI";
+                    _log.LogType = "Error";
+                    _log.UserName = "string";
+                    _log.Message = _response.Message;
+
+                    _logService.WriteLog(_log);
+                }
             }
             catch (Exception ex)
             {

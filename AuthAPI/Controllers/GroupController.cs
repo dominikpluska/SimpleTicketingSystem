@@ -138,23 +138,42 @@ namespace AuthAPI.Controllers
         }
 
         [HttpPut("UpdateGroup/{id}")]
-        public async Task<ActionResult<Response>> UpdateGroup(int id, Group group)
+        public async Task<ActionResult<Response>> UpdateGroup(int id, Group groupNew)
         {
             try
             {
-                 _unitOfWorkGroup.GroupRepository.Update(group);
-                 _unitOfWorkGroup.SaveChanges();
+                var group = await _unitOfWorkGroup.GroupRepository.GetFirstOrDefault(x => x.GroupId == id);
+                if (group != null)
+                {
+                    groupNew.GroupId = group.GroupId;
+                    _unitOfWorkGroup.GroupRepository.Update(groupNew);
+                    _unitOfWorkGroup.SaveChanges();
 
-                 _response.IsSuccess = true;
-                 _response.Message = $"{group.GroupName} has been modified to the table by string";
-                 _response.Data = group;
+                    _response.IsSuccess = true;
+                    _response.Message = $"{group.GroupName} has been modified!";
+                    _response.Data = groupNew;
 
-                 _log.ServiceName = "AuthAPI";
-                 _log.LogType = "Info";
-                 _log.UserName = "string";
-                 _log.Message = _response.Message;
+                    _log.ServiceName = "AuthAPI";
+                    _log.LogType = "Info";
+                    _log.UserName = "string";
+                    _log.Message = _response.Message;
 
-                 _logService.WriteLog(_log);
+                    _logService.WriteLog(_log);
+                }
+                else
+                {
+                    _response.IsSuccess = false;
+                    _response.Message = $"Group with the id of {id} has not been found!";
+                    _response.Data = groupNew;
+
+                    _log.ServiceName = "AuthAPI";
+                    _log.LogType = "Info";
+                    _log.UserName = "string";
+                    _log.Message = _response.Message;
+
+                    _logService.WriteLog(_log);
+                }
+                
             }
             catch (Exception ex)
             {
@@ -181,19 +200,38 @@ namespace AuthAPI.Controllers
             try
             {
                 var group = await _unitOfWorkGroup.GroupRepository.GetFirstOrDefault(x => x.GroupId == id);
-                _unitOfWorkGroup.GroupRepository.Remove(group);
-                _unitOfWorkGroup.SaveChanges();
 
-                _response.IsSuccess = true;
-                _response.Message = $"{group.GroupName} has been removed by string";
-                _response.Data = null;
+                if (group != null)
+                {
+                    _unitOfWorkGroup.GroupRepository.Remove(group);
+                    _unitOfWorkGroup.SaveChanges();
 
-                _log.ServiceName = "AuthAPI";
-                _log.LogType = "Info";
-                _log.UserName = "string";
-                _log.Message = _response.Message;
+                    _response.IsSuccess = true;
+                    _response.Message = $"{group.GroupName} has been removed by string";
+                    _response.Data = null;
 
-                _logService.WriteLog(_log);
+                    _log.ServiceName = "AuthAPI";
+                    _log.LogType = "Info";
+                    _log.UserName = "string";
+                    _log.Message = _response.Message;
+
+                    _logService.WriteLog(_log);
+                }
+                else
+                {
+                    _response.IsSuccess = false;
+                    _response.Message = $"Group with the id of  {id}  has not been found!";
+                    _response.Data = null;
+
+                    _log.ServiceName = "AuthAPI";
+                    _log.LogType = "Info";
+                    _log.UserName = "string";
+                    _log.Message = _response.Message;
+
+                    _logService.WriteLog(_log);
+
+                }
+               
             }
             catch(Exception ex)
             {
