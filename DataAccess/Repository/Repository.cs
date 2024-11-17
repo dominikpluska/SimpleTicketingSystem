@@ -17,22 +17,22 @@ namespace DataAccess.Repository
             this._dbSet = _context.Set<T>();
         }
 
-        public void Add(T entity)
+        public virtual void Add(T entity)
         {
             _dbSet.Add(entity);
         }
 
-        public void Update(T entity)
+        public virtual void Update(T entity)
         {
             _dbSet.Update(entity);
         }
 
-        public void RemoveRange(IEnumerable<T> entitties)
+        public virtual void RemoveRange(IEnumerable<T> entitties)
         {
             _dbSet.RemoveRange(entitties);
         }
 
-        public async Task<T> Get(Expression<Func<T, bool>>? filter = null, string? includeProperties = null, bool tracked = false)
+        public virtual async Task<T> Get(Expression<Func<T, bool>>? filter = null, string? includeProperties = null, bool tracked = false)
         {
             IQueryable<T> query = _dbSet;
 
@@ -58,7 +58,7 @@ namespace DataAccess.Repository
             return await query.FirstOrDefaultAsync();
         }
 
-        public async Task<IEnumerable<T>> GetAll(Expression<Func<T, bool>>? filter = null, string? includeProperties = null)
+        public virtual async Task<IEnumerable<T>> GetAll(Expression<Func<T, bool>>? filter = null, string? includeProperties = null)
         {
             IQueryable<T> query = _dbSet;
             if (filter != null)
@@ -75,7 +75,7 @@ namespace DataAccess.Repository
             return await query.ToListAsync();
         }
 
-        public async Task<T> GetFirstOrDefault(Expression<Func<T, bool>>? filter)
+        public virtual async Task<T> GetFirstOrDefault(Expression<Func<T, bool>>? filter)
         {
             IQueryable<T> query = _dbSet;
             if(filter != null)
@@ -86,7 +86,7 @@ namespace DataAccess.Repository
         }
 
 
-        public void Remove(T entity)
+        public virtual void Remove(T entity)
         {
             _dbSet.Remove(entity);
         }
