@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 using System.Net.Sockets;
+using TicketsAPI.Dto;
 using TicketsAPI.UnitOfWork;
 
 namespace TicketsAPI.Controllers
@@ -13,13 +14,15 @@ namespace TicketsAPI.Controllers
     public class TicketsController : ControllerBase
     {
         private readonly IUnitOfWorkTicket _unitOfWorkTicket;
+        private readonly IUnitOfWorkCategory _unitOfWorkCategory;
         private readonly IGlobalServices _logService;
         private readonly Response _response;
         private readonly Log _log;
         
-        public TicketsController(IUnitOfWorkTicket unitOfWorkTicket, IGlobalServices logService)
+        public TicketsController(IUnitOfWorkTicket unitOfWorkTicket,IUnitOfWorkCategory unitOfWorkCategory   ,IGlobalServices logService)
         {
             _unitOfWorkTicket = unitOfWorkTicket;
+            _unitOfWorkCategory = unitOfWorkCategory;
             _logService = logService;
 
             _response = new Response();
@@ -31,16 +34,14 @@ namespace TicketsAPI.Controllers
         {
             try
             {
-                var list = await _unitOfWorkTicket.TicketRepository.GetAll();
+                var list = await _unitOfWorkTicket.TicketRepository.GetAll(includeProperties: "Category");
+
                 _response.IsSuccess = true;
                 _response.Message = $"All tickets have been retrived by the controller";
                 _response.Data = list;
-
-
                 _log.ServiceName = "TicketAPI";
                 _log.UserName = "string";
                 _log.Message = _response.Message;
-
                 _logService.WriteLog(_log);
             }
             catch (Exception ex)
@@ -131,10 +132,42 @@ namespace TicketsAPI.Controllers
         }
 
         [HttpPost("PostNewTicket")]
-        public async  Task<ActionResult<Response>> PostNewTicket(Ticket ticket)
+        public async  Task<ActionResult<Response>> PostNewTicket(TicketDto ticketDto)
         {
             try
             {
+                var category = await _unitOfWorkCategory.CategoryRepository.Get(x => x.CategoryName == ticketDto.CategoryName);
+
+                if(category == null)
+                {
+                    _response.IsSuccess = false;
+                    _response.Message = $"Category must be provided!";
+                    _response.Data = null;
+
+
+                    _log.ServiceName = "TicketAPI";
+                    _log.LogType = "Error";
+                    _log.UserName = "string";
+                    _log.Message = _response.Message;
+
+                    _logService.WriteLog(_log);
+                }
+
+                Ticket ticket = new (){
+                    Title = ticketDto.Title,
+                    UserName = ticketDto.UserName,
+                    AssigmentGroup = ticketDto.AssigmentGroup,
+                    Category = category!,
+                    CategoryId = category!.CategoryId,
+                    CreationDate = ticketDto.CreationDate,
+                    Description = ticketDto.Description,
+                    LastModifiedDate = ticketDto.LastModifiedDate,
+                    Severity = ticketDto.Severity,
+                    Status = ticketDto.Status,
+                    TicketType = ticketDto.TicketType,
+                };
+
+
                 _unitOfWorkTicket.TicketRepository.Add(ticket);
                 await _unitOfWorkTicket.SaveChanges();
                 _response.IsSuccess = true;
@@ -157,7 +190,7 @@ namespace TicketsAPI.Controllers
                 _response.Data = "Error";
 
                 _log.ServiceName = "TicketAPI";
-                _log.UserName = ticket.UserName;
+                _log.UserName = ticketDto.UserName;
                 _log.Message = _response.Message;
 
                 _logService.WriteLog(_log);

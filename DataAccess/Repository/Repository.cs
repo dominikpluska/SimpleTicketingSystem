@@ -5,6 +5,7 @@ using System.Linq.Expressions;
 
 namespace DataAccess.Repository
 {
+    //To be completely redesigned
     public class Repository<T> : IRepository<T> where T : class
     {
         private readonly DbContext _context;
@@ -67,7 +68,7 @@ namespace DataAccess.Repository
             }
             if (!string.IsNullOrEmpty(includeProperties))
             {
-                foreach (var includeProperty in includeProperties!.Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries))
+                foreach (var includeProperty in includeProperties!.Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries).Select(x => x.Trim()))
                 {
                     query = query.Include(includeProperty);
                 }

@@ -13,25 +13,27 @@ namespace DataAccess.Models
         [Key]
         public int TicketId { get; set; }
         [Required]
+        public string Title { get; set; }
+        [Required]
+        public string Description { get; set; }
+        [Required]
+        public string Status { get; set; }
+        [Required]
         public string UserName { get; set; }
         [Required]
         public string TicketType { get; set; }
         [Required]
         [ForeignKey("CategoryId")]
-        public int CategoryId { get; set; } = 11;
+        public int CategoryId{ get; set; }
+        [NotMapped]
+        public Category Category { get; set; }
         [Required]
         public string Severity { get; set; }
-        public string AssigmentGroup { get; set; } = StaticData.StaticData.defaultAssingmentGroup;
+        public string AssigmentGroup { get; set; } 
         [Required]
-        public DateTime CreationDate { get; set; } = DateTime.Now;
+        public DateTime CreationDate { get; set; } 
         [Required]
-        public DateTime LastModifiedDate { get; set; } = DateTime.Now;
-        [Required]
-        public string Title { get; set; }
-        [Required]
-        public string Description { get; set; }
-        [Required]
-        public string Status { get; set; } = "New";
+        public DateTime LastModifiedDate { get; set; } 
 
     }
 }
