@@ -1,11 +1,9 @@
 ﻿using DataAccess.Models;
 using GlobalServices.Interface;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using System.Collections.Generic;
-using System.Net.Sockets;
 using TicketsAPI.Dto;
 using TicketsAPI.UnitOfWork;
+using TicketsAPI.UnitOfWork.Interface;
 
 namespace TicketsAPI.Controllers
 {
@@ -15,14 +13,16 @@ namespace TicketsAPI.Controllers
     {
         private readonly IUnitOfWorkTicket _unitOfWorkTicket;
         private readonly IUnitOfWorkCategory _unitOfWorkCategory;
+        private readonly IUnitOfWorkComment _unitOfWorkComment;
         private readonly IGlobalServices _logService;
         private readonly Response _response;
         private readonly Log _log;
         
-        public TicketsController(IUnitOfWorkTicket unitOfWorkTicket,IUnitOfWorkCategory unitOfWorkCategory   ,IGlobalServices logService)
+        public TicketsController(IUnitOfWorkTicket unitOfWorkTicket, IUnitOfWorkCategory unitOfWorkCategory,IUnitOfWorkComment unitOfWorkComment, IGlobalServices logService)
         {
             _unitOfWorkTicket = unitOfWorkTicket;
             _unitOfWorkCategory = unitOfWorkCategory;
+            _unitOfWorkComment = unitOfWorkComment;
             _logService = logService;
 
             _response = new Response();
@@ -67,7 +67,7 @@ namespace TicketsAPI.Controllers
         {
             try
             {
-                var ticket = await _unitOfWorkTicket.TicketRepository.GetFirstOrDefault(x => x.TicketId == id);
+                var ticket = await _unitOfWorkTicket.TicketRepository.Get(x => x.TicketId == id, includeProperties: "Category", tracked: true);
                 _response.IsSuccess = true;
                 _response.Message = $"Ticket with the Id of {id} tickets has been retrived by the string";
                 _response.Data = ticket;
@@ -138,7 +138,7 @@ namespace TicketsAPI.Controllers
             {
                 var category = await _unitOfWorkCategory.CategoryRepository.Get(x => x.CategoryName == ticketDto.CategoryName);
 
-                if(category == null)
+                if (category == null)
                 {
                     _response.IsSuccess = false;
                     _response.Message = $"Category must be provided!";
@@ -151,13 +151,15 @@ namespace TicketsAPI.Controllers
                     _log.Message = _response.Message;
 
                     _logService.WriteLog(_log);
+
+                    return StatusCode(500, _response);
                 }
 
-                Ticket ticket = new (){
+                Ticket ticket = new()
+                {
                     Title = ticketDto.Title,
                     UserName = ticketDto.UserName,
                     AssigmentGroup = ticketDto.AssigmentGroup,
-                    Category = category!,
                     CategoryId = category!.CategoryId,
                     CreationDate = ticketDto.CreationDate,
                     Description = ticketDto.Description,
@@ -181,6 +183,19 @@ namespace TicketsAPI.Controllers
                 _log.Message = _response.Message;
 
                 _logService.WriteLog(_log);
+
+                if(ticketDto.Comment != null || ticketDto.Comment.Length > 5)
+                {
+                    Comment comment = new()
+                    {
+                        TicketId = ticket.TicketId,
+                        UserId = 1,
+                        CommentField = ticketDto.Comment,
+                    };
+
+                    _unitOfWorkComment.CommentRepository.Add(comment);
+                    await _unitOfWorkComment.SaveChanges();
+                }
 
             }
             catch (Exception ex)
@@ -257,5 +272,6 @@ namespace TicketsAPI.Controllers
 
             return _response;
         }
+
     }
 }

@@ -3,6 +3,7 @@ using DataAccess.Repository;
 using DataAccess.Repository.Interface;
 using Microsoft.EntityFrameworkCore;
 using TicketsAPI.Data;
+using TicketsAPI.UnitOfWork.Interface;
 
 namespace TicketsAPI.UnitOfWork
 {

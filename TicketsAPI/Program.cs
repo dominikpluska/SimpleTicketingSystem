@@ -1,10 +1,10 @@
-using DataAccess;
 using DataAccess.StaticData;
 using GlobalServices.Interface;
 using Microsoft.EntityFrameworkCore;
 using TicketsAPI.Data;
 using TicketsAPI.Services;
 using TicketsAPI.UnitOfWork;
+using TicketsAPI.UnitOfWork.Interface;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -25,7 +25,9 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddHttpClient("Log", x => x.BaseAddress = new Uri("https://localhost:7201"));
 builder.Services.AddScoped<IUnitOfWorkTicket, UnitOfWorkTicket>();
 builder.Services.AddScoped<IUnitOfWorkCategory, UnitOfWorkCategory>();
+builder.Services.AddScoped<IUnitOfWorkComment, UnitOfWorkComment>();
 builder.Services.AddScoped<IGlobalServices, Services>();
+
 
 var app = builder.Build();
 

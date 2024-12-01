@@ -23,10 +23,12 @@ namespace DataAccess.Models
         [Required]
         [ForeignKey("RoleId")]
         public int RoleId { get; set; }
+        public Role Role { get; set; } 
 
         [Required]
         [ForeignKey("GroupId")]
         public int GroupId { get; set; }
+        public Group Group { get; set; }
 
         public bool IsActive { get; set; } = true;
     }

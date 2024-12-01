@@ -2,10 +2,8 @@
 using Microsoft.EntityFrameworkCore;
 using System.Linq.Expressions;
 
-
 namespace DataAccess.Repository
 {
-    //To be completely redesigned
     public class Repository<T> : IRepository<T> where T : class
     {
         private readonly DbContext _context;
@@ -75,6 +73,7 @@ namespace DataAccess.Repository
             }
             return await query.ToListAsync();
         }
+
 
         public virtual async Task<T> GetFirstOrDefault(Expression<Func<T, bool>>? filter)
         {

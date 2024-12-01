@@ -298,7 +298,7 @@ namespace AuthAPI.Controllers
         {
             try
             {
-                var userAccounts = await _unitOfWorkAuth.AuthRepository.GetAll();
+                var userAccounts = await _unitOfWorkAuth.AuthRepository.GetAll(includeProperties: "Group");
                 _response.IsSuccess = true;
                 _response.Message = "All accounts have been retrived!";
                 _response.Data = userAccounts;

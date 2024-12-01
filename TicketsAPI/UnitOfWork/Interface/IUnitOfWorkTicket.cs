@@ -1,13 +1,12 @@
-﻿using Microsoft.AspNetCore.Authentication.Cookies;
+﻿using DataAccess.Models;
 using DataAccess.Repository.Interface;
 
-namespace TicketsAPI.UnitOfWork
+namespace TicketsAPI.UnitOfWork.Interface
 {
-    public interface IUnitOfWorkTicket
+    public interface IUnitOfWorkTicket 
     {
         public ITicketRepository TicketRepository { get; }
 
         public Task SaveChanges();
-
     }
 }

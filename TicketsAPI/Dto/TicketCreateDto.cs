@@ -1,14 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
+﻿using DataAccess.Models;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.ComponentModel.DataAnnotations;
 
-namespace DataAccess.Models
+namespace TicketsAPI.Dto
 {
-    public class Ticket
+    public class TicketCreateDto
     {
         [Key]
         public int TicketId { get; set; }
@@ -23,16 +19,13 @@ namespace DataAccess.Models
         [Required]
         public string TicketType { get; set; }
         [Required]
-        [ForeignKey("CategoryId")]
-        public int CategoryId{ get; set; }
-        public Category Category { get; set; }
+        public int CategoryId { get; set; }
         [Required]
         public string Severity { get; set; }
-        public string AssigmentGroup { get; set; } 
+        public string AssigmentGroup { get; set; }
         [Required]
-        public DateTime CreationDate { get; set; } 
+        public DateTime CreationDate { get; set; }
         [Required]
-        public DateTime LastModifiedDate { get; set; } 
-
+        public DateTime LastModifiedDate { get; set; }
     }
 }

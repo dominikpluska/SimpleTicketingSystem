@@ -10,7 +10,7 @@ namespace DataAccess.Repository.Interface
 {
     public interface IRepository<T> where T : class
     {
-        Task<IEnumerable<T>> GetAll(Expression<Func<T, bool>>? filter =null, string? includeProperties = null);
+        Task<IEnumerable<T>> GetAll(Expression<Func<T, bool>>? filter = null, string? includeProperties = null);
         Task<T> Get(Expression<Func<T, bool>>? filter = null, string? includeProperties = null, bool tracked = false);
         Task<T> GetFirstOrDefault(Expression<Func<T, bool>>? filter);
         void Add(T entity);

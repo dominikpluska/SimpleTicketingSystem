@@ -1,8 +1,8 @@
 ﻿using DataAccess.Repository.Interface;
 
-namespace TicketsAPI.UnitOfWork
+namespace TicketsAPI.UnitOfWork.Interface
 {
-    public interface IUnitOfWorkComment 
+    public interface IUnitOfWorkComment
     {
         public ICommentRepository CommentRepository { get; }
 
