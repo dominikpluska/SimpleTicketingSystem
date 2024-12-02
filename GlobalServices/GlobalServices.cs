@@ -1,5 +1,6 @@
 ﻿using DataAccess.Models;
 using GlobalServices.Interface;
+using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,11 +13,11 @@ namespace GlobalServices
     public class GlobalServices : IGlobalServices
     {
         private readonly IHttpClientFactory _httpClientFactory;
+
         public GlobalServices(IHttpClientFactory httpClientFactory)
         {
             _httpClientFactory = httpClientFactory;
         }
-
         public async void SendEmail(Email email)
         {
             ApiOperation(email, "Mail", $"/api/Mail/WriteLog");

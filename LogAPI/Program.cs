@@ -4,6 +4,8 @@ using LogAPI.Data;
 using Microsoft.EntityFrameworkCore;
 using DataAccess.StaticData;
 using LogAPI.UnitOfWork;
+using Microsoft.Extensions.Configuration;
+using GlobalServices;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -13,9 +15,7 @@ builder.Services.AddControllers();
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
 {
-    //options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
-    options.UseSqlServer(StaticData.ReturnConnectionString("SimpleTicketingSystem_Logs"));
-    
+    options.UseSqlServer(Configuration.GetDatabaseString("SimpleTicketingSystem_Logs"));
 });
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();

@@ -1,4 +1,5 @@
 using DataAccess.StaticData;
+using GlobalServices;
 using GlobalServices.Interface;
 using Microsoft.EntityFrameworkCore;
 using TicketsAPI.Data;
@@ -10,13 +11,10 @@ using TicketsAPI.UnitOfWork.Interface;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-
-//AppSettings.ConfigurationReader();
-
 builder.Services.AddControllers();
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
 {
-    options.UseSqlServer(StaticData.ReturnConnectionString("SimpleTicketingSystem_Tickets"));
+    options.UseSqlServer(Configuration.GetDatabaseString("SimpleTicketingSystem_Tickets"));
 });
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();

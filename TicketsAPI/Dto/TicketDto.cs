@@ -2,6 +2,7 @@
 using DataAccess.StaticData;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.ComponentModel.DataAnnotations;
+using GlobalServices;
 
 namespace TicketsAPI.Dto
 {
@@ -12,7 +13,7 @@ namespace TicketsAPI.Dto
         public string TicketType { get; set; }
         public string CategoryName { get; set; } = "Other";
         public string Severity { get; set; }
-        public string AssigmentGroup { get; set; } = StaticData.defaultAssingmentGroup;
+        public string AssigmentGroup { get; set; } = Configuration.GetDefaultAssigmentGroup();
         public DateTime CreationDate { get; set; } = DateTime.Now;
         public DateTime LastModifiedDate { get; set; } = DateTime.Now;
         public string Title { get; set; }

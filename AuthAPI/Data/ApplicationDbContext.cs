@@ -1,6 +1,7 @@
 ﻿using AuthAPI.Dto;
 using DataAccess.Models;
 using DataAccess.StaticData;
+using GlobalServices;
 using Microsoft.EntityFrameworkCore;
 using System.Data;
 
@@ -55,7 +56,7 @@ namespace AuthAPI.Data
             modelBuilder.Entity<Group>().HasData(new Group
             {
                 GroupId = 1,
-                GroupName = StaticData.defaultAssingmentGroup.ToString(),
+                GroupName = Configuration.GetDefaultAssigmentGroup()
             });
 
             modelBuilder.Entity<Group>().HasData(new Group

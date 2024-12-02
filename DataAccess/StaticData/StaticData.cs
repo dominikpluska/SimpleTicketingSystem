@@ -22,12 +22,5 @@ namespace DataAccess.StaticData
             Request
         }
 
-        public const string defaultAssingmentGroup = "HelpDesk";
-
-        public static string ReturnConnectionString(string dataBase)
-        {
-            return $"Server=.;Database={dataBase};Trusted_Connection=True;TrustServerCertificate=True;";
-        }
-
     }
 }

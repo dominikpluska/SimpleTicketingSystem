@@ -1,6 +1,7 @@
 ﻿using DataAccess.Models;
 using GlobalServices.Interface;
 using Microsoft.AspNetCore.Mvc;
+using System.Xml.Linq;
 using TicketsAPI.Dto;
 using TicketsAPI.UnitOfWork;
 using TicketsAPI.UnitOfWork.Interface;
@@ -17,6 +18,7 @@ namespace TicketsAPI.Controllers
         private readonly IGlobalServices _logService;
         private readonly Response _response;
         private readonly Log _log;
+        private readonly Comment _comment;
         
         public TicketsController(IUnitOfWorkTicket unitOfWorkTicket, IUnitOfWorkCategory unitOfWorkCategory,IUnitOfWorkComment unitOfWorkComment, IGlobalServices logService)
         {
@@ -27,6 +29,7 @@ namespace TicketsAPI.Controllers
 
             _response = new Response();
             _log = new Log();
+            _comment = new Comment();
         }
 
         [HttpGet("GetAllTickets")]
@@ -186,14 +189,12 @@ namespace TicketsAPI.Controllers
 
                 if(ticketDto.Comment != null || ticketDto.Comment.Length > 5)
                 {
-                    Comment comment = new()
-                    {
-                        TicketId = ticket.TicketId,
-                        UserId = 1,
-                        CommentField = ticketDto.Comment,
-                    };
 
-                    _unitOfWorkComment.CommentRepository.Add(comment);
+                    _comment.TicketId = ticket.TicketId;
+                    _comment.UserId = 1;
+                    _comment.CommentField = ticketDto.Comment;
+
+                    _unitOfWorkComment.CommentRepository.Add(_comment);
                     await _unitOfWorkComment.SaveChanges();
                 }
 
